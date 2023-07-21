@@ -1,0 +1,85 @@
+<!-- Hi this is simple digital clock with glowing effect made with a little css and js  -->
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Digital Clock</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="header">
+    <div class="right-container">
+      <label class="switch">
+        <input type="checkbox" id="light-mode" onclick="handleToggle(this);">
+        <span class="slider round"></span>
+      </label>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="wrapper">
+      <div class="display">
+        <div id="time"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    let full_time = false;
+
+    setInterval(() => {
+      const time = document.querySelector(".display #time");
+      let date = new Date();
+      let hours = date.getHours();
+      let minutes = date.getMinutes();
+      let seconds = date.getSeconds();
+      let millisec = Math.floor(date.getMilliseconds() / 10).toFixed(0);
+      let day_night = "";
+
+      if (!full_time) {
+        day_night = "AM";
+        if (hours > 12) {
+          day_night = "PM";
+          hours = hours - 12;
+        }
+      }
+
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      if (millisec < 10) {
+        millisec = "0" + millisec;
+      }
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+      if (hours < 10) {
+        hours = "0" + hours;
+      }
+      time.textContent = hours + ":" + minutes + ":" + seconds + ":" + millisec + " " + day_night;
+    });
+
+    const handleToggle = () => {
+      document.querySelector("html").classList.toggle("toggleOn");
+      localStorage.setItem("light-mode", document.querySelector("#light-mode").checked)
+    }
+
+    if (localStorage.getItem("light-mode") == "true") {
+      document.querySelector("#light-mode").checked = true;
+      document.querySelector("html").classList.toggle("toggleOn");
+    }
+
+    if (localStorage.getItem("full_time") == "true") {
+      full_time = true;
+    }
+
+    time.addEventListener('dblclick', function (e) {
+      full_time = !full_time;
+      localStorage.setItem("full_time", full_time);
+    });
+  </script>
+</body>
+
+</html>
